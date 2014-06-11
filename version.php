@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$plugin->version = 2014012403;  // YYYYMMDDHH (year, month, day, 24-hr time)
+$plugin->version = 2014012403;  // YYYYMMDDHH (year, month, day, 24-hr time).
 $plugin->requires = 2012062500; // YYYYMMDDHH (This is the release version for Moodle 2.3).
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release  = '2.3+';
