@@ -31,13 +31,12 @@ class block_turnitin extends block_base {
         $output = '';
 
         if (!empty($USER->id)) {
-	    $PAGE->requires->jquery();
-	    $PAGE->requires->jquery_plugin('turnitintooltwo-block', 'mod_turnitintooltwo');
+            $this->page->requires->js_init_call('M.block_turnitin.init');
 
             $cssurl = new moodle_url($CFG->wwwroot.'/mod/turnitintooltwo/css/styles_block.css');
             $PAGE->requires->css($cssurl);
 
-            $output .= $OUTPUT->box($OUTPUT->pix_icon('loader', '', 'mod_turnitintooltwo'), 'centered_cell', 'block_loading');
+            $output .= $OUTPUT->box($OUTPUT->pix_icon('y/loading', 'Loading...'), 'centered_cell block_loading', 'tii_block_loading');
             $output .= html_writer::link($CFG->wwwroot.'/mod/turnitintooltwo/extras.php?cmd=courses',
                                         html_writer::tag('noscript', get_string('coursestomigrate', 'mod_turnitintooltwo', '')), array('id' => 'block_migrate_content'));
         }
