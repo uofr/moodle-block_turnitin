@@ -23,15 +23,14 @@ M.block_turnitin = {
                         // Process the JSON data returned from the server
                         try {
                             var data = Y.JSON.parse(o.responseText);
+                            if (data.blockHTML == '') {
+                                Y.one(".block_turnitin #block_migrate_content").setHTML(data.blockHTML);
+                            } else {
+                                tiiblock.hide();
+                            }
                         }
                         catch (e) {
-                            //tiiblock.hide();
-                        }
-
-                        if (data.blockHTML == '') {
-                            Y.one(".block_turnitin #block_migrate_content").setHTML(data.blockHTML);
-                        } else {
-                            //tiiblock.hide();
+                            tiiblock.hide();
                         }
                     },
 
