@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$plugin->version = 2014110600;  // YYYYMMDDHH (year, month, day, 24-hr time).
+$plugin->version = 2014112100;  // YYYYMMDDHH (year, month, day, 24-hr time).
 $plugin->requires = 2012062500; // YYYYMMDDHH (This is the release version for Moodle 2.3).
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release  = '2.3+';
-$plugin->dependencies = array('mod_turnitintooltwo' => 2014110600);
+$plugin->dependencies = array('mod_turnitintooltwo' => 2014112100);
