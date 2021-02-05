@@ -1,50 +1,50 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once($CFG->dirroot.'/mod/turnitintooltwo/lib.php');
 
 class block_turnitin extends block_base {
     public function init() {
-        $this->title = get_string('turnitin', 'turnitintooltwo');
+        $this->title = get_string('turnitin', 'block_turnitin');
     }
 
     public function get_content() {
-        global $CFG, $OUTPUT, $USER, $PAGE, $DB;
+    	global $CFG, $OUTPUT, $USER, $PAGE, $DB;
 
-        if ($this->content !== null) {
-            return $this->content;
+    	if ($this->content !== null) {
+			return $this->content;
+		}
+
+		$config = turnitintooltwo_admin_config();
+		$output = '';
+
+		// Show link to Helpdesk wizard if enabled and the logged in user is an instrutor.
+		if (!empty($USER->id) && $config->helpdeskwizard && has_capability('moodle/course:manageactivities', context_system::instance())) {
+			$output = $OUTPUT->box(
+								html_writer::tag('p',
+									html_writer::link($CFG->wwwroot.'/mod/turnitintooltwo/extras.php?cmd=supportwizard',
+										get_string('helpdesklink', 'block_turnitin'))));
+		}
+
+		if (!empty($USER->id) && has_capability('moodle/course:create', context_system::instance())) {
+			$PAGE->requires->jquery();
+	        $PAGE->requires->jquery_plugin('block-turnitin', 'block_turnitin');
+
+	        $cssurl = new moodle_url($CFG->wwwroot.'/mod/turnitintooltwo/css/styles_block.css');
+        	$PAGE->requires->css($cssurl);
+
+	        $output .= $OUTPUT->box($OUTPUT->pix_icon('loader', '', 'mod_turnitintooltwo'), 'centered_cell', 'block_loading');
+	        $output .= html_writer::link($CFG->wwwroot.'/mod/turnitintooltwo/extras.php?cmd=courses',
+	        							html_writer::tag('noscript', get_string('coursestomigrate', 'block_turnitin', '')), array('id' => 'block_migrate_content'));
         }
 
-        $output = '';
+	    $this->content = new stdClass;
+	    $this->content->text = $output;
+	    $this->content->footer = '';
 
-        if (!empty($USER->id)) {
-            $this->page->requires->js_init_call('M.block_turnitin.init');
+	    return $this->content;
+    }
 
-            $cssurl = new moodle_url($CFG->wwwroot.'/mod/turnitintooltwo/css/styles_block.css');
-            $PAGE->requires->css($cssurl);
-
-            $output .= $OUTPUT->box($OUTPUT->pix_icon('y/loading', 'Loading...'), 'centered_cell block_loading', 'tii_block_loading');
-            $output .= html_writer::link($CFG->wwwroot.'/mod/turnitintooltwo/extras.php?cmd=courses',
-                                        html_writer::tag('noscript', get_string('coursestomigrate', 'mod_turnitintooltwo', '')), array('id' => 'block_migrate_content'));
-        }
-
-        $this->content = new stdClass;
-        $this->content->text = $output;
-        $this->content->footer = '';
-
-        return $this->content;
+    public function applicable_formats() {
+        return array('all' => true, 'mod' => true, 'tag' => false);
     }
 }
